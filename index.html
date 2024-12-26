@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма заказа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px dashed #ccc;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-section {
+            width: 48%;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #FFC107;
+            border: none;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #e0a806;
+        }
+
+        .summary-section {
+            width: 48%;
+        }
+
+        .summary-section h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .summary-content {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Форма заказа</h1>
+        </div>
+        <div class="form-container">
+            <!-- Блок информации о заказе -->
+            <div class="form-section">
+                <h2>Информация о заказе</h2>
+                <label for="first-name">Имя:</label>
+                <input type="text" id="first-name" placeholder="Введите ваше имя">
+                <div id="first-name-error" class="error"></div>
+
+                <label for="last-name">Фамилия:</label>
+                <input type="text" id="last-name" placeholder="Введите вашу фамилию">
+                <div id="last-name-error" class="error"></div>
+
+                <label for="phone-number">Номер телефона:</label>
+                <input type="text" id="phone-number" placeholder="XXX-XXX-XXX">
+                <div id="phone-number-error" class="error"></div>
+
+                <label for="destination">Адрес:</label>
+                <input type="text" id="destination" placeholder="Введите адрес">
+                <div id="destination-error" class="error"></div>
+
+                <label for="datetime">Дата и время:</label>
+                <div class="datetime-group">
+                    <input type="date" id="date">
+                    <div id="date-error" class="error"></div>
+                    <input type="time" id="time">
+                    <div id="time-error" class="error"></div>
+                </div>
+
+                <label for="quantity">Количество:</label>
+                <input type="number" id="quantity" placeholder="Введите количество">
+                <div id="quantity-error" class="error"></div>
+
+                <label for="payment">Метод оплаты:</label>
+                <select id="payment">
+                    <option value="">Выберите метод оплаты</option>
+                    <option value="cash">Наличные</option>
+                    <option value="card">Карта</option>
+                </select>
+                <div id="payment-error" class="error"></div>
+
+                <button id="submit-button" type="button">Отправить заказ</button>
+            </div>
+
+            <!-- Блок резюме заказа -->
+            <div class="summary-section" id="summary-section">
+                <h2>Сводка заказа</h2>
+                <p>Здесь будет отображена информация о заказе:</p>
+                <div class="summary-content" id="summary-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('submit-button').addEventListener('click', function () {
+            // Сбрасываем ошибки
+            document.querySelectorAll('.error').forEach(error => error.textContent = '');
+
+            // Получаем значения из полей
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const quantity = document.getElementById('quantity').value.trim();
+            const payment = document.getElementById('payment').value;
+
+            let isValid = true;
+
+            // Проверяем поля
+            if (!firstName) {
+                document.getElementById('first-name-error').textContent = 'Имя обязательно для заполнения.';
+                isValid = false;
+            }
+            if (!lastName) {
+                document.getElementById('last-name-error').textContent = 'Фамилия обязательна для заполнения.';
+                isValid = false;
+            }
+            if (!phoneNumber || !/^\d{3}-\d{3}-\d{4}$/.test(phoneNumber)) {
+                document.getElementById('phone-number-error').textContent = 'Введите корректный номер телефона (XXX-XXX-XXX).';
+                isValid = false;
+            }
+            if (!destination) {
+                document.getElementById('destination-error').textContent = 'Адрес обязателен для заполнения.';
+                isValid = false;
+            }
+            if (!date) {
+                document.getElementById('date-error').textContent = 'Дата обязательна для заполнения.';
+                isValid = false;
+            }
+            if (!time) {
+                document.getElementById('time-error').textContent = 'Время обязательно для заполнения.';
+                isValid = false;
+            }
+            if (!quantity || quantity <= 0) {
+                document.getElementById('quantity-error').textContent = 'Введите корректное количество.';
+                isValid = false;
+            }
+            if (!payment) {
+                document.getElementById('payment-error').textContent = 'Выберите метод оплаты.';
+                isValid = false;
+            }
+
+            // Если валидация пройдена, показываем данные
+            if (isValid) {
+                const summaryContent = `
+                    <p><strong>Имя:</strong> ${firstName}</p>
+                    <p><strong>Фамилия:</strong> ${lastName}</p>
+                    <p><strong>Номер телефона:</strong> ${phoneNumber}</p>
+                    <p><strong>Адрес:</strong> ${destination}</p>
+                    <p><strong>Дата:</strong> ${date}</p>
+                    <p><strong>Время:</strong> ${time}</p>
+                    <p><strong>Количество:</strong> ${quantity}</p>
+                    <p><strong>Метод оплаты:</strong> ${payment}</p>
+                `;
+                document.getElementById('summary-content').innerHTML = summaryContent;
+            }
+        });
+    </script>
+</body>
+
+</html>
